@@ -46,7 +46,7 @@ namespace panorama_wallpaper_changer
                     wallpaperAmount = wallpapers.Length;
                     using (StreamWriter sw = File.CreateText(saveFile))
                     {
-                        sw.WriteLine(wallpaper);
+                        sw.WriteLine(wallpaperAmount);
                         sw.WriteLine(csgoInstallPath);
                         sw.WriteLine(panoramaWallpaperPath);
                         sw.WriteLine(panoramaWallpaperStoragePath);
@@ -121,8 +121,14 @@ namespace panorama_wallpaper_changer
             if (selectedWallpaper == activeWallpaper)
             {
                 ReturnToChooseWallpaper();
+            } else if (selectedWallpaper == panoramaWallpaperStoragePath + "backup") {
+                ReturnToChooseWallpaper();
             } else {
-                SetWallpaper();
+                if (File.Exists(selectedWallpaper + "\\nuke.webm" && File.Exists(selectedWallpaper + "\\nuke540p.webm") && File.Exists(selectedWallpaper + "\\nuke720p.webm") {
+                    SetWallpaper();
+                } else {
+                    ReturnToChooseWallpaper();
+                } 
             }
         }
 
