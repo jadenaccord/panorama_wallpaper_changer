@@ -1,0 +1,11 @@
+D:\Projects\Visual Studio\panorama_wallpaper_changer\bin\Debug\netcoreapp2.1\panorama_wallpaper_changer.deps.json
+D:\Projects\Visual Studio\panorama_wallpaper_changer\bin\Debug\netcoreapp2.1\panorama_wallpaper_changer.runtimeconfig.json
+D:\Projects\Visual Studio\panorama_wallpaper_changer\bin\Debug\netcoreapp2.1\panorama_wallpaper_changer.runtimeconfig.dev.json
+D:\Projects\Visual Studio\panorama_wallpaper_changer\bin\Debug\netcoreapp2.1\panorama_wallpaper_changer.dll
+D:\Projects\Visual Studio\panorama_wallpaper_changer\bin\Debug\netcoreapp2.1\panorama_wallpaper_changer.pdb
+D:\Projects\Visual Studio\panorama_wallpaper_changer\obj\Debug\netcoreapp2.1\panorama_wallpaper_changer.csprojAssemblyReference.cache
+D:\Projects\Visual Studio\panorama_wallpaper_changer\obj\Debug\netcoreapp2.1\panorama_wallpaper_changer.csproj.CoreCompileInputs.cache
+D:\Projects\Visual Studio\panorama_wallpaper_changer\obj\Debug\netcoreapp2.1\panorama_wallpaper_changer.AssemblyInfoInputs.cache
+D:\Projects\Visual Studio\panorama_wallpaper_changer\obj\Debug\netcoreapp2.1\panorama_wallpaper_changer.AssemblyInfo.cs
+D:\Projects\Visual Studio\panorama_wallpaper_changer\obj\Debug\netcoreapp2.1\panorama_wallpaper_changer.dll
+D:\Projects\Visual Studio\panorama_wallpaper_changer\obj\Debug\netcoreapp2.1\panorama_wallpaper_changer.pdb
