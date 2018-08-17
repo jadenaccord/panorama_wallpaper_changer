@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using System.Diagnostic;
+using System.Diagnostics;
 
 namespace panorama_wallpaper_changer
 {
