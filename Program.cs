@@ -8,17 +8,24 @@ namespace panorama_wallpaper_changer
 {
     class Program
     {
+        public string csgoInstallPath; //Folder containing csgo.exe
+        public string panoramaWallpaperStoragePath; //Folder with all 'inactive' pano wallpapers
+        public string panoramaWallpaperPath; //Folder with 'active' pano wallpapers and the folder above
+        public string selectedWallpaper; //Wallpaper that will replace active wallpaper
+        public string activeWallpaper; //Wallpaper that will be replaced by selected wallpaper
+        public string saveFile = "C:\\ProgramData\\Panorama Wallpaper Changer\\saveddata.txt";
+        public string[] wallpapers;
+        public int wallpaperAmount;
+
         static void Main(string[] args)
         {
-            public string csgoInstallPath; //Folder containing csgo.exe
-            public string panoramaWallpaperStoragePath; //Folder with all 'inactive' pano wallpapers
-            public string panoramaWallpaperPath; //Folder with 'active' pano wallpapers and the folder above
-            public string selectedWallpaper; //Wallpaper that will replace active wallpaper
-            public string activeWallpaper; //Wallpaper that will be replaced by selected wallpaper
-            public string saveFile = "C:\\ProgramData\\Panorama Wallpaper Changer\\saveddata.txt";
-            public string[] wallpapers;
-            public int wallpaperAmount;
+            Program pr = new Program();
 
+            pr.Start();
+        }
+
+        void Start()
+        {
             //First check if a panorama wallpaper changer save file is found
             if (File.Exists(saveFile))
             {
@@ -29,7 +36,7 @@ namespace panorama_wallpaper_changer
                     csgoInstallPath = sr.ReadLine();
                     panoramaWallpaperPath = sr.ReadLine();
                     panoramaWallpaperStoragePath = sr.ReadLine();
-                    wallpapers = Directory.GetDirectories(panoramaWallpaperPath);
+                    wallpapers = Directory.GetDirectories(panoramaWallpaperStoragePath);
                     activeWallpaper = sr.ReadLine();
                 }
 
@@ -39,7 +46,7 @@ namespace panorama_wallpaper_changer
                     wallpaperAmount = wallpapers.Length;
                     using (StreamWriter sw = File.CreateText(saveFile))
                     {
-                        sw.WriteLine(wallpaperAmount);
+                        sw.WriteLine(wallpaper);
                         sw.WriteLine(csgoInstallPath);
                         sw.WriteLine(panoramaWallpaperPath);
                         sw.WriteLine(panoramaWallpaperStoragePath);
@@ -54,12 +61,12 @@ namespace panorama_wallpaper_changer
             }
         }
 
-        void Setup()
+        public void Setup()
         {
             Console.WriteLine("No existing save file was found. Proceeding with setup.");
-            Console.WriteLine("Please insert your CSGO folder (the folder that contains 'csgo.exe') replace '\' with '\\'");
+            Console.WriteLine("Please insert your CSGO folder (the folder that contains 'csgo.exe') replace '\\' with '\\\'");
             string userInput = Console.ReadLine();
-            if (userInput = "help") { //If user types in help instead of a path, user gets instructions
+            if (userInput == "help") { //If user types in help instead of a path, user gets instructions
                 Console.WriteLine("You can find your CSGO folder using the following steps:");
                 Console.WriteLine("1. Open your Steam library.");
                 Console.WriteLine("2. Right-click CSGO and choose 'Properties'.");
@@ -69,7 +76,7 @@ namespace panorama_wallpaper_changer
                 ReturnToSetup();
             } else { //If user types in a path, that path will be used
                 csgoInstallPath = userInput;
-                panoramaWallpaperPath = csgoInstallPath + "\\csgo\\panorama\\videos\\";
+                panoramaWallpaperPath = csgoInstallPath + "csgo\\panorama\\videos\\";
                 panoramaWallpaperStoragePath = panoramaWallpaperPath + "stored\\";
 
                 wallpapers = Directory.GetDirectories(panoramaWallpaperPath);
@@ -93,24 +100,25 @@ namespace panorama_wallpaper_changer
                 Console.WriteLine("Setup complete.");
                 Console.WriteLine("Press any button to continue...");
                 Console.ReadKey();
-                ChooseWallpaper();
+                Start();
             }
         }
 
         //Used to loop back to setup
-        void ReturnToSetup()
+        public void ReturnToSetup()
         {
             Setup();
         }
 
-        void ChooseWallpaper()
+        public void ChooseWallpaper()
         {
             //Get a random number within range of wallpapers
             Random r = new Random();
-            int i = r.Next(1, wallpaperAmount);
+            int i = r.Next(0, wallpaperAmount);
 
             selectedWallpaper = wallpapers[i];
-            if (selectedWallpaper = activeWallpaper)
+            Console.WriteLine(selectedWallpaper);
+            if (selectedWallpaper == activeWallpaper)
             {
                 ReturnToChooseWallpaper();
             } else {
@@ -119,17 +127,17 @@ namespace panorama_wallpaper_changer
         }
 
         //Used to loop back to wallpaper selection
-        void ReturnToChooseWallpaper()
+        public void ReturnToChooseWallpaper()
         {
             ChooseWallpaper();
         }
 
-        void SetWallpaper()
+        public void SetWallpaper()
         {
             //Replace active wallpaper with new wallpaper
-            File.Copy(selectedWallpaper + "nuke.webm", panoramaWallpaperPath + "nuke.webm", true);
-            File.Copy(selectedWallpaper + "nuke540p.webm", panoramaWallpaperPath + "nuke540p.webm", true);
-            File.Copy(selectedWallpaper + "nuke720p.webm", panoramaWallpaperPath + "nuke720p.webm", true);
+            File.Copy(selectedWallpaper + "\\nuke.webm", panoramaWallpaperPath + "\\nuke.webm", true);
+            File.Copy(selectedWallpaper + "\\nuke540p.webm", panoramaWallpaperPath + "\\nuke540p.webm", true);
+            File.Copy(selectedWallpaper + "\\nuke720p.webm", panoramaWallpaperPath + "\\nuke720p.webm", true);
             
             //Update activeWallpaper here and in save file
             activeWallpaper = selectedWallpaper;
