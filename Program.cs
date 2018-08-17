@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Diagnostic;
 
 namespace panorama_wallpaper_changer
 {
@@ -124,8 +125,9 @@ namespace panorama_wallpaper_changer
             } else if (selectedWallpaper == panoramaWallpaperStoragePath + "backup") {
                 ReturnToChooseWallpaper();
             } else {
-                if (File.Exists(selectedWallpaper + "\\nuke.webm") && File.Exists(selectedWallpaper + "\\nuke540p.webm") && File.Exists(selectedWallpaper + "\\nuke720p.webm")) {
-                    SetWallpaper();
+                if (File.Exists(selectedWallpaper + "\\nuke.webm") && File.Exists(selectedWallpaper + "\\nuke540p.webm") && File.Exists(selectedWallpaper + "\\nuke720p.webm"))
+                {
+                    SetWallpaper(false);
                 } else {
                     Console.WriteLine("Selected folder doesn't contain compatible wallpapers.");
                     ReturnToChooseWallpaper();
@@ -139,7 +141,7 @@ namespace panorama_wallpaper_changer
             ChooseWallpaper();
         }
 
-        public void SetWallpaper()
+        public void SetWallpaper(bool runCS)
         {
             //Replace active wallpaper with new wallpaper
             File.Copy(selectedWallpaper + "\\nuke.webm", panoramaWallpaperPath + "\\nuke.webm", true);
@@ -159,6 +161,11 @@ namespace panorama_wallpaper_changer
 
             Console.WriteLine("Wallpaper set to " + activeWallpaper);
             Console.ReadKey();
+
+            if (runCS) 
+            {
+                Process.Start(csgoInstallPath + "csgo.exe");
+            }
         }
     }
 }
