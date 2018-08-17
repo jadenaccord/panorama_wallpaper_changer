@@ -124,7 +124,7 @@ namespace panorama_wallpaper_changer
             } else if (selectedWallpaper == panoramaWallpaperStoragePath + "backup") {
                 ReturnToChooseWallpaper();
             } else {
-                if (File.Exists(selectedWallpaper + "\\nuke.webm" && File.Exists(selectedWallpaper + "\\nuke540p.webm") && File.Exists(selectedWallpaper + "\\nuke720p.webm") {
+                if (File.Exists(selectedWallpaper + "\\nuke.webm" && File.Exists(selectedWallpaper + "\\nuke540p.webm") && File.Exists(selectedWallpaper + "\\nuke720p.webm")) {
                     SetWallpaper();
                 } else {
                     ReturnToChooseWallpaper();
