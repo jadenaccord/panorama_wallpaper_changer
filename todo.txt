@@ -1,3 +1,0 @@
-- Find a better way to run same function again (without ReturnTo functions) [TD01]
-- Extensively test the program [TD02]
-- Make CSGO run after wallpaper is changed [TD03]
