@@ -7,3 +7,4 @@ Keep in mind that any folder inside that folder will be considered a usable wall
 Also make sure that you have the original video files saved in folder "backup" inside the wallpaper storage folder and keep an extra copy somewhere entirely outside of CSGO just to be sure.
 
 Please report any problems on GitHub at https://github.com/Jayby18/panorama_wallpaper_changer/issues
+And before using please read the Wiki at https://github.com/Jayby18/panorama_wallpaper_changer/wiki
