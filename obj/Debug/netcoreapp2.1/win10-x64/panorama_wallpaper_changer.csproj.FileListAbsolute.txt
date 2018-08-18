@@ -1,0 +1,14 @@
+D:\Projects\Visual Studio\panorama_wallpaper_changer\bin\debug\netcoreapp2.1\win10-x64\hostpolicy.dll
+D:\Projects\Visual Studio\panorama_wallpaper_changer\bin\debug\netcoreapp2.1\win10-x64\hostfxr.dll
+D:\Projects\Visual Studio\panorama_wallpaper_changer\bin\debug\netcoreapp2.1\win10-x64\panorama_wallpaper_changer.exe
+D:\Projects\Visual Studio\panorama_wallpaper_changer\bin\debug\netcoreapp2.1\win10-x64\panorama_wallpaper_changer.deps.json
+D:\Projects\Visual Studio\panorama_wallpaper_changer\bin\debug\netcoreapp2.1\win10-x64\panorama_wallpaper_changer.runtimeconfig.json
+D:\Projects\Visual Studio\panorama_wallpaper_changer\bin\debug\netcoreapp2.1\win10-x64\panorama_wallpaper_changer.runtimeconfig.dev.json
+D:\Projects\Visual Studio\panorama_wallpaper_changer\bin\debug\netcoreapp2.1\win10-x64\panorama_wallpaper_changer.dll
+D:\Projects\Visual Studio\panorama_wallpaper_changer\bin\debug\netcoreapp2.1\win10-x64\panorama_wallpaper_changer.pdb
+D:\Projects\Visual Studio\panorama_wallpaper_changer\obj\debug\netcoreapp2.1\win10-x64\panorama_wallpaper_changer.csprojAssemblyReference.cache
+D:\Projects\Visual Studio\panorama_wallpaper_changer\obj\debug\netcoreapp2.1\win10-x64\panorama_wallpaper_changer.csproj.CoreCompileInputs.cache
+D:\Projects\Visual Studio\panorama_wallpaper_changer\obj\debug\netcoreapp2.1\win10-x64\panorama_wallpaper_changer.AssemblyInfoInputs.cache
+D:\Projects\Visual Studio\panorama_wallpaper_changer\obj\debug\netcoreapp2.1\win10-x64\panorama_wallpaper_changer.AssemblyInfo.cs
+D:\Projects\Visual Studio\panorama_wallpaper_changer\obj\debug\netcoreapp2.1\win10-x64\panorama_wallpaper_changer.dll
+D:\Projects\Visual Studio\panorama_wallpaper_changer\obj\debug\netcoreapp2.1\win10-x64\panorama_wallpaper_changer.pdb

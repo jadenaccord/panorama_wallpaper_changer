@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using System.ComponentModel;
 
 namespace panorama_wallpaper_changer
 {
@@ -17,6 +18,7 @@ namespace panorama_wallpaper_changer
         public string saveFile = "C:\\ProgramData\\Panorama Wallpaper Changer\\saveddata.txt";
         public string[] wallpapers;
         public int wallpaperAmount;
+        public bool revealChosenWallpaper = false;
 
         static void Main(string[] args)
         {
@@ -52,6 +54,7 @@ namespace panorama_wallpaper_changer
                         sw.WriteLine(panoramaWallpaperPath);
                         sw.WriteLine(panoramaWallpaperStoragePath);
                         sw.WriteLine(activeWallpaper);
+                        sw.WriteLine(revealChosenWallpaper);
                     }
                 }
 
@@ -83,6 +86,17 @@ namespace panorama_wallpaper_changer
                 wallpapers = Directory.GetDirectories(panoramaWallpaperPath);
                 wallpaperAmount = wallpapers.Length;
 
+                Console.WriteLine("Do you want the chosen wallpaper to be revealed? (Answer 'true' or 'false')");
+                userInput = Console.ReadLine();
+                if (userInput == "true") {
+                    revealChosenWallpaper = true;
+                } else if (userInput == "false") {
+                    revealChosenWallpaper = false;
+                } else {
+                    Console.WriteLine("Answer not usable. revealChosenWallpaper set to default (false).");
+                    revealChosenWallpaper = false;
+                }
+
                 if (!Directory.Exists("C:\\ProgramData\\Panorama Wallpaper Changer\\"))
                 {
                     //If save file directory doesn't exist, create it
@@ -96,6 +110,7 @@ namespace panorama_wallpaper_changer
                     sw.WriteLine(csgoInstallPath);
                     sw.WriteLine(panoramaWallpaperPath);
                     sw.WriteLine(panoramaWallpaperStoragePath);
+                    sw.WriteLine(revealChosenWallpaper);
                 }
 
                 Console.WriteLine("Setup complete.");
@@ -118,7 +133,6 @@ namespace panorama_wallpaper_changer
             int i = r.Next(0, wallpaperAmount);
 
             selectedWallpaper = wallpapers[i];
-            Console.WriteLine(selectedWallpaper);
             if (selectedWallpaper == activeWallpaper)
             {
                 ReturnToChooseWallpaper();
@@ -127,7 +141,7 @@ namespace panorama_wallpaper_changer
             } else {
                 if (File.Exists(selectedWallpaper + "\\nuke.webm") && File.Exists(selectedWallpaper + "\\nuke540p.webm") && File.Exists(selectedWallpaper + "\\nuke720p.webm"))
                 {
-                    SetWallpaper(false);
+                    SetWallpaper(true);
                 } else {
                     Console.WriteLine("Selected folder doesn't contain compatible wallpapers.");
                     ReturnToChooseWallpaper();
@@ -157,14 +171,20 @@ namespace panorama_wallpaper_changer
                 sw.WriteLine(panoramaWallpaperPath);
                 sw.WriteLine(panoramaWallpaperStoragePath);
                 sw.WriteLine(activeWallpaper);
+                sw.WriteLine(revealChosenWallpaper);
             }
 
-            Console.WriteLine("Wallpaper set to " + activeWallpaper);
-            Console.ReadKey();
+            if (revealChosenWallpaper)
+            {
+                Console.WriteLine("Wallpaper set to " + activeWallpaper);
+                Console.ReadKey();
+            }
 
             if (runCS) 
             {
-                Process.Start(csgoInstallPath + "csgo.exe");
+                ProcessStartInfo startInfo = new ProcessStartInfo(@"D:\ApplicationData\Steam\Steam.exe");
+                startInfo.Arguments = "-applaunch 730";
+                Process.Start(startInfo);
             }
         }
     }
