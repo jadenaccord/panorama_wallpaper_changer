@@ -1,0 +1,7 @@
+New in version 2.0.0
+
+- PWC actually works if you don't have Steam installed in a path I for some reason chose (you can have your own path)
+- PWC internal versioning implemented
+    - If backwards-incompatible update is applied, user will need to do setup again
+    - PWC keeps track of current version
+- Code is more efficient
