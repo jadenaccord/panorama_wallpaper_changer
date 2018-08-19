@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
-using System.ComponentModel;
 
 namespace panorama_wallpaper_changer
 {
@@ -67,92 +66,84 @@ namespace panorama_wallpaper_changer
 
         public void Setup()
         {
-            Console.WriteLine("No existing save file was found. Proceeding with setup.");
-            Console.WriteLine("Please insert your CSGO folder (the folder that contains 'csgo.exe') replace '\\' with '\\\'");
-            string userInput = Console.ReadLine();
-            if (userInput == "help") { //If user types in help instead of a path, user gets instructions
-                Console.WriteLine("You can find your CSGO folder using the following steps:");
-                Console.WriteLine("1. Open your Steam library.");
-                Console.WriteLine("2. Right-click CSGO and choose 'Properties'.");
-                Console.WriteLine("3. Open the tab 'Local Files'.");
-                Console.WriteLine("4. Click 'BROWSE LOCAL FILES'.");
-                Console.WriteLine("You should see the path above all the files now. Copy it and insert insert it when asked again.");
-                ReturnToSetup();
-            } else { //If user types in a path, that path will be used
-                csgoInstallPath = userInput;
-                panoramaWallpaperPath = csgoInstallPath + "csgo\\panorama\\videos\\";
-                panoramaWallpaperStoragePath = panoramaWallpaperPath + "stored\\";
+            while (true)
+            {
+                Console.WriteLine("No existing save file was found. Proceeding with setup.");
+                Console.WriteLine("Please insert your CSGO folder (the folder that contains 'csgo.exe') replace '\\' with '\\\'");
+                string userInput = Console.ReadLine();
+                if (userInput == "help") { //If user types in help instead of a path, user gets instructions
+                    Console.WriteLine("You can find your CSGO folder using the following steps:");
+                    Console.WriteLine("1. Open your Steam library.");
+                    Console.WriteLine("2. Right-click CSGO and choose 'Properties'.");
+                    Console.WriteLine("3. Open the tab 'Local Files'.");
+                    Console.WriteLine("4. Click 'BROWSE LOCAL FILES'.");
+                    Console.WriteLine("You should see the path above all the files now. Copy it and insert insert it when asked again.");
+                } else { //If user types in a path, that path will be used
+                    csgoInstallPath = userInput;
+                    panoramaWallpaperPath = csgoInstallPath + "csgo\\panorama\\videos\\";
+                    panoramaWallpaperStoragePath = panoramaWallpaperPath + "stored\\";
 
-                wallpapers = Directory.GetDirectories(panoramaWallpaperPath);
-                wallpaperAmount = wallpapers.Length;
+                    wallpapers = Directory.GetDirectories(panoramaWallpaperPath);
+                    wallpaperAmount = wallpapers.Length;
 
-                Console.WriteLine("Do you want the chosen wallpaper to be revealed? (Answer 'true' or 'false')");
-                userInput = Console.ReadLine();
-                if (userInput == "true") {
-                    revealChosenWallpaper = true;
-                } else if (userInput == "false") {
-                    revealChosenWallpaper = false;
-                } else {
-                    Console.WriteLine("Answer not usable. revealChosenWallpaper set to default (false).");
-                    revealChosenWallpaper = false;
+                    while (true)
+                    {
+                        Console.WriteLine("Do you want the chosen wallpaper to be revealed? (Answer 'true' or 'false')");
+                        userInput = Console.ReadLine();
+                        if (userInput == "true") {
+                            revealChosenWallpaper = true;
+                            break;
+                        } else if (userInput == "false") {
+                            revealChosenWallpaper = false;
+                            break;
+                        } else {
+                            Console.WriteLine("Answer not usable. Please try again.");
+                        }
+                    }
+
+                    if (!Directory.Exists("C:\\ProgramData\\Panorama Wallpaper Changer\\"))
+                    {
+                        //If save file directory doesn't exist, create it
+                        Directory.CreateDirectory("C:\\ProgramData\\Panorama Wallpaper Changer\\");
+                    }
+
+                    //Write data to savefile
+                    using (StreamWriter sw = File.CreateText(saveFile))
+                    {
+                        sw.WriteLine(wallpaperAmount);
+                        sw.WriteLine(csgoInstallPath);
+                        sw.WriteLine(panoramaWallpaperPath);
+                        sw.WriteLine(panoramaWallpaperStoragePath);
+                        sw.WriteLine(revealChosenWallpaper);
+                    }
+
+                    Console.WriteLine("Setup complete.");
+                    Console.WriteLine("Press any button to continue...");
+                    Console.ReadKey();
+                    Start();
+                    break;
                 }
-
-                if (!Directory.Exists("C:\\ProgramData\\Panorama Wallpaper Changer\\"))
-                {
-                    //If save file directory doesn't exist, create it
-                    Directory.CreateDirectory("C:\\ProgramData\\Panorama Wallpaper Changer\\");
-                }
-
-                //Write data to savefile
-                using (StreamWriter sw = File.CreateText(saveFile))
-                {
-                    sw.WriteLine(wallpaperAmount);
-                    sw.WriteLine(csgoInstallPath);
-                    sw.WriteLine(panoramaWallpaperPath);
-                    sw.WriteLine(panoramaWallpaperStoragePath);
-                    sw.WriteLine(revealChosenWallpaper);
-                }
-
-                Console.WriteLine("Setup complete.");
-                Console.WriteLine("Press any button to continue...");
-                Console.ReadKey();
-                Start();
             }
-        }
-
-        //Used to loop back to setup
-        public void ReturnToSetup()
-        {
-            Setup();
         }
 
         public void ChooseWallpaper()
         {
-            //Get a random number within range of wallpapers
-            Random r = new Random();
-            int i = r.Next(0, wallpaperAmount);
-
-            selectedWallpaper = wallpapers[i];
-            if (selectedWallpaper == activeWallpaper)
+            while (true)
             {
-                ReturnToChooseWallpaper();
-            } else if (selectedWallpaper == panoramaWallpaperStoragePath + "backup") {
-                ReturnToChooseWallpaper();
-            } else {
-                if (File.Exists(selectedWallpaper + "\\nuke.webm") && File.Exists(selectedWallpaper + "\\nuke540p.webm") && File.Exists(selectedWallpaper + "\\nuke720p.webm"))
+                //Get a random number within range of wallpapers
+                Random r = new Random();
+                int i = r.Next(0, wallpaperAmount);
+
+                selectedWallpaper = wallpapers[i];
+                if (selectedWallpaper != activeWallpaper && selectedWallpaper != panoramaWallpaperStoragePath + "backup" 
+                    && File.Exists(selectedWallpaper + "\\nuke.webm") && File.Exists(selectedWallpaper + "\\nuke540p.webm") 
+                    && File.Exists(selectedWallpaper + "\\nuke720p.webm"))
                 {
                     SetWallpaper(true);
-                } else {
-                    Console.WriteLine("Selected folder doesn't contain compatible wallpapers.");
-                    ReturnToChooseWallpaper();
-                } 
+                    break;
+                }
+                //If any of those condition above are not met, ChooseWallpaper() will basically run again. But the condition that wasn't met isn't put out.
             }
-        }
-
-        //Used to loop back to wallpaper selection
-        public void ReturnToChooseWallpaper()
-        {
-            ChooseWallpaper();
         }
 
         public void SetWallpaper(bool runCS)
