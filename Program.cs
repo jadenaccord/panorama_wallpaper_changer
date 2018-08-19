@@ -117,6 +117,7 @@ namespace panorama_wallpaper_changer
                         {
                             steamInstallPath = userInput;
                         } else {
+                            //Code below still doesn't seem to work #TODO
                             steamInstallPath = csgoInstallPath.Replace("\\steamapps\\common\\Counter-Strike Global Offensive\\", "");
                         }
 
