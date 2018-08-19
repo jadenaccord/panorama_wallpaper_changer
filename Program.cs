@@ -102,61 +102,65 @@ namespace panorama_wallpaper_changer
                     Console.WriteLine("You should see the path above all the files now. Copy it and insert insert it when asked again.");
                 } else { //If user types in a path, that path will be used
                     csgoInstallPath = userInput;
-                    panoramaWallpaperPath = csgoInstallPath + "csgo\\panorama\\videos\\";
-                    panoramaWallpaperStoragePath = panoramaWallpaperPath + "stored\\";
-
-                    wallpapers = Directory.GetDirectories(panoramaWallpaperPath);
-                    wallpaperAmount = wallpapers.Length;
-
-                    Console.WriteLine("If your CSGO is not located inside your Steam installation, enter your Steam folder below (use the same formatting as your CSGO folder). Otherwise press enter.");
-                    userInput = Console.ReadLine();
-                    if (userInput != null)
+                    string testCSGOPath = csgoInstallPath.Remove(csgoInstallPath.Length - 2);
+                    if (Directory.Exists(testCSGOPath))
                     {
-                        steamInstallPath = userInput;
-                    } else {
-                        steamInstallPath = csgoInstallPath.Replace("\\steamapps\\common\\Counter-Strike Global Offensive\\", "");
-                    }
+                        panoramaWallpaperPath = csgoInstallPath + "csgo\\panorama\\videos\\";
+                        panoramaWallpaperStoragePath = panoramaWallpaperPath + "stored\\";
 
-                    while (true)
-                    {
-                        Console.WriteLine("Do you want the chosen wallpaper to be revealed? (Answer 'true' or 'false')");
+                        wallpapers = Directory.GetDirectories(panoramaWallpaperPath);
+                        wallpaperAmount = wallpapers.Length;
+
+                        Console.WriteLine("If your CSGO is not located inside your Steam installation, enter your Steam folder below (use the same formatting as your CSGO folder). Otherwise press enter.");
                         userInput = Console.ReadLine();
-                        if (userInput == "true") {
-                            revealChosenWallpaper = true;
-                            break;
-                        } else if (userInput == "false") {
-                            revealChosenWallpaper = false;
-                            break;
+                        if (userInput != "")
+                        {
+                            steamInstallPath = userInput;
                         } else {
-                            Console.WriteLine("Answer not usable. Please try again.");
+                            steamInstallPath = csgoInstallPath.Replace("\\steamapps\\common\\Counter-Strike Global Offensive\\", "");
                         }
-                    }
 
-                    if (!Directory.Exists("C:\\ProgramData\\Panorama Wallpaper Changer\\"))
-                    {
-                        //If save file directory doesn't exist, create it
-                        Directory.CreateDirectory("C:\\ProgramData\\Panorama Wallpaper Changer\\");
-                    }
+                        while (true)
+                        {
+                            Console.WriteLine("Do you want the chosen wallpaper to be revealed? (Answer 'true' or 'false')");
+                            userInput = Console.ReadLine();
+                            if (userInput == "true") {
+                                revealChosenWallpaper = true;
+                                break;
+                            } else if (userInput == "false") {
+                                revealChosenWallpaper = false;
+                                break;
+                            } else {
+                                Console.WriteLine("Answer not usable. Please try again.");
+                            }
+                        }
 
-                    //Write data to savefile
-                    using (StreamWriter sw = File.CreateText(saveFile))
-                    {
-                        sw.WriteLine(currentVersion);
-                        sw.WriteLine(wallpaperAmount);
-                        sw.WriteLine(steamInstallPath);
-                        sw.WriteLine(csgoInstallPath);
-                        sw.WriteLine(panoramaWallpaperPath);
-                        sw.WriteLine(panoramaWallpaperStoragePath);
-                        sw.WriteLine(activeWallpaper);
-                        sw.WriteLine(revealChosenWallpaper);
-                    }
+                        if (!Directory.Exists("C:\\ProgramData\\Panorama Wallpaper Changer\\"))
+                        {
+                            //If save file directory doesn't exist, create it
+                            Directory.CreateDirectory("C:\\ProgramData\\Panorama Wallpaper Changer\\");
+                        }
 
-                    Console.WriteLine("Setup complete.");
-                    Console.WriteLine("Press any button to continue...");
-                    Console.ReadKey();
-                    Console.Clear();
-                    Start();
-                    break;
+                        //Write data to savefile
+                        using (StreamWriter sw = File.CreateText(saveFile))
+                        {
+                            sw.WriteLine(currentVersion);
+                            sw.WriteLine(wallpaperAmount);
+                            sw.WriteLine(steamInstallPath);
+                            sw.WriteLine(csgoInstallPath);
+                            sw.WriteLine(panoramaWallpaperPath);
+                            sw.WriteLine(panoramaWallpaperStoragePath);
+                            sw.WriteLine(activeWallpaper);
+                            sw.WriteLine(revealChosenWallpaper);
+                        }
+
+                        Console.WriteLine("Setup complete.");
+                        Console.WriteLine("Press any button to continue...");
+                        Console.ReadKey();
+                        Console.Clear();
+                        Start();
+                        break;
+                    }
                 }
             }
         }
