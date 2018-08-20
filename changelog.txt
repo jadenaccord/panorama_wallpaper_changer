@@ -1,4 +1,4 @@
-New in version 2.0.0
+New in version 1.0.0
 
 - PWC actually works if you don't have Steam installed in a path I for some reason chose (you can have your own path)
 - PWC internal versioning implemented
