@@ -1,3 +1,5 @@
+Panorama Wallpaper Changer
+
 Thanks for using Panorama Wallpaper Changer by Jayby18.
 
 Before running this program make sure that all your wallpapers are inside your CSGO installation folder, more specifically inside:
