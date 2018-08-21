@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using System.Security.Permissions;
+using Microsoft.Win32;
 
 namespace panorama_wallpaper_changer
 {
     class Program
     {
         //Saved in save file
-        public string currentVersion = @"1.0.0";
+        public string currentVersion = @"1.1.0";
         public int wallpaperAmount;
         public string steamInstallPath; //Folder containing steam.exe
         public string csgoInstallPath; //Folder containing csgo.exe
@@ -90,77 +92,100 @@ namespace panorama_wallpaper_changer
         {
             while (true)
             {
-                Console.WriteLine("No existing save file was found. Proceeding with setup.");
-                Console.WriteLine(@"Please insert your CSGO folder (the folder that contains 'csgo.exe') replace '\' with '\\' and end with '\\'");
-                string userInput = Console.ReadLine();
-                if (userInput == "help") { //If user types in help instead of a path, user gets instructions
-                    Console.WriteLine("You can find your CSGO folder using the following steps:");
-                    Console.WriteLine("1. Open your Steam library.");
-                    Console.WriteLine("2. Right-click CSGO and choose 'Properties'.");
-                    Console.WriteLine("3. Open the tab 'Local Files'.");
-                    Console.WriteLine("4. Click 'BROWSE LOCAL FILES'.");
-                    Console.WriteLine("You should see the path above all the files now. Copy it and insert insert it when asked again.");
-                } else { //If user types in a path, that path will be used
-                    csgoInstallPath = userInput;
-                    string testCSGOPath = csgoInstallPath.Remove(csgoInstallPath.Length - 2);
-                    if (Directory.Exists(testCSGOPath))
+                string userInput;
+
+                //Find Steam install path in registry
+                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\WOW6432Node\Valve\Steam"))
+                {
+                    if (key != null)
                     {
-                        panoramaWallpaperPath = csgoInstallPath + "csgo\\panorama\\videos\\";
-                        panoramaWallpaperStoragePath = panoramaWallpaperPath + "stored\\";
-
-                        wallpapers = Directory.GetDirectories(panoramaWallpaperPath);
-                        wallpaperAmount = wallpapers.Length;
-
-                        Console.WriteLine("If your CSGO is not located inside your Steam installation, enter your Steam folder below (use the same formatting as your CSGO folder). Otherwise press enter.");
-                        userInput = Console.ReadLine();
-                        if (userInput != "")
+                        steamInstallPath = key.GetValue("InstallPath");
+                    } else {
+                        using (RegistryKey key2 = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Valve\Steam"))
                         {
-                            steamInstallPath = userInput;
-                        } else {
-                            steamInstallPath = csgoInstallPath.Remove(csgoInstallPath.Length - 52);
-                        }
-
-                        while (true)
-                        {
-                            Console.WriteLine("Do you want the chosen wallpaper to be revealed? (Answer 'true' or 'false')");
-                            userInput = Console.ReadLine();
-                            if (userInput == "true") {
-                                revealChosenWallpaper = true;
-                                break;
-                            } else if (userInput == "false") {
-                                revealChosenWallpaper = false;
-                                break;
+                            if (key != null)
+                            {
+                                steamInstallPath = key.GetValue("InstallPath");
                             } else {
-                                Console.WriteLine("Answer not usable. Please try again.");
+                                Console.WriteLine("Steam Install Path was not found, please enter it below:");
+                                steamInstallPath = Console.ReadLine();
                             }
                         }
-
-                        if (!Directory.Exists("C:\\ProgramData\\Panorama Wallpaper Changer\\"))
-                        {
-                            //If save file directory doesn't exist, create it
-                            Directory.CreateDirectory("C:\\ProgramData\\Panorama Wallpaper Changer\\");
-                        }
-
-                        //Write data to savefile
-                        using (StreamWriter sw = File.CreateText(saveFile))
-                        {
-                            sw.WriteLine(currentVersion);
-                            sw.WriteLine(wallpaperAmount);
-                            sw.WriteLine(steamInstallPath);
-                            sw.WriteLine(csgoInstallPath);
-                            sw.WriteLine(panoramaWallpaperPath);
-                            sw.WriteLine(panoramaWallpaperStoragePath);
-                            sw.WriteLine(activeWallpaper);
-                            sw.WriteLine(revealChosenWallpaper);
-                        }
-
-                        Console.WriteLine("Setup complete.");
-                        Console.WriteLine("Press any button to continue...");
-                        Console.ReadKey();
-                        Console.Clear();
-                        Start();
-                        break;
                     }
+                }
+
+                //Look through Steam libraries until CSGO is found
+                string[] steamLibraries;
+
+                using (StreamReader sr = new StreamReader(steamInstallPath + @"\steamapps\libraryfolder.txt"))
+                {
+                    string[] fileInput = sr.ReadAllLines();
+
+                    int i = 0;
+                    for (int n = 3; n < (fileInput.Length - 2); n++)
+                    {
+                        streamLibraries[i] = fileInput[n]
+                        i++
+                    }
+
+                    for (int n = 0; n < steamLibraries.Length; n++)
+                    {
+                        steamLibraries[n] = steamLibraries[n].Replace(' ', '');
+                        steamLibraries[n] = steamLibraries[n].Remove(0, 4);
+                        steamLibraries[n] = steamLibraries[n].Replace('"', '');
+                    }
+
+                    for (int n = 0; n < steamLibraries.Length; n++)
+                    {
+                        string csgoSearchPath = steamLibraries[n] + "\\steamapps\\common\\Counter-Strike Global Offensive\\csgo.exe";
+                        if (File.Exists(csgoSearchPath))
+                        {
+                            csgoInstallPath = csgoSearchPath;
+                            break;
+                        }
+                    }
+                }
+
+                while (true)
+                {
+                    Console.WriteLine("Do you want the chosen wallpaper to be revealed? (Answer 'true' or 'false')");
+                    userInput = Console.ReadLine();
+                    if (userInput == "true") {
+                        revealChosenWallpaper = true;
+                        break;
+                    } else if (userInput == "false") {
+                        revealChosenWallpaper = false;
+                        break;
+                    } else {
+                        Console.WriteLine("Answer not usable. Please try again.");
+                    }
+                }
+
+                if (!Directory.Exists("C:\\ProgramData\\Panorama Wallpaper Changer\\"))
+                {
+                    //If save file directory doesn't exist, create it
+                    Directory.CreateDirectory("C:\\ProgramData\\Panorama Wallpaper Changer\\");
+                }
+
+                //Write data to savefile
+                using (StreamWriter sw = File.CreateText(saveFile))
+                {
+                    sw.WriteLine(currentVersion);
+                    sw.WriteLine(wallpaperAmount);
+                    sw.WriteLine(steamInstallPath);
+                    sw.WriteLine(csgoInstallPath);
+                    sw.WriteLine(panoramaWallpaperPath);
+                    sw.WriteLine(panoramaWallpaperStoragePath);
+                    sw.WriteLine(activeWallpaper);
+                    sw.WriteLine(revealChosenWallpaper);
+                }
+
+                Console.WriteLine("Setup complete.");
+                Console.WriteLine("Press any button to continue...");
+                Console.ReadKey();
+                Console.Clear();
+                Start();
+                break;
                 }
             }
         }
