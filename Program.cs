@@ -25,12 +25,11 @@ namespace panorama_wallpaper_changer
         public string selectedWallpaper; //Wallpaper that will replace active wallpaper
         public string saveFile = "C:\\ProgramData\\Panorama Wallpaper Changer\\saveddata.txt"; 
         public string[] wallpapers;
-        string[] steamLibraries;
+        string[] steamLibraries = new string[32];
 
         static void Main(string[] args)
         {
             Program pr = new Program();
-
             Console.Clear();
             pr.Start();
         }
@@ -53,7 +52,13 @@ namespace panorama_wallpaper_changer
                     activeWallpaper = sr.ReadLine();
                     revealChosenWallpaper = bool.Parse(sr.ReadLine());
 
-                    wallpapers = Directory.GetDirectories(panoramaWallpaperStoragePath);
+                    try
+                    {
+                        wallpapers = Directory.GetDirectories(panoramaWallpaperStoragePath);
+                    } catch (ArgumentException) {
+                        //If path is empty, go to setup
+                        Setup();
+                    }
                 }
 
                 string[] currentVersionSplit = currentVersion.Split('.');
@@ -91,8 +96,6 @@ namespace panorama_wallpaper_changer
 
         public void Setup()
         {
-            int i = 0;
-
             string userInput;
 
             //Find Steam install path in registry (thank you u/DontRushB)
@@ -113,37 +116,54 @@ namespace panorama_wallpaper_changer
                         }
                     }
                 }
-
-                Console.WriteLine(steamInstallPath);
             }
 
             //Look through Steam libraries until CSGO is found
-            string[] fileInput = File.ReadAllLines(steamInstallPath + @"\steamapps\libraryfolders.vdf");
-
-            for (int n = 3; n < (fileInput.Length - 2); n++)
+            if (File.Exists(steamInstallPath + "\\steamapps\\common\\Counter-Strike Global Offensive\\csgo.exe"))
             {
-                steamLibraries[i] = fileInput[n];
-                i++; //This keeps getting NullReferenceExceptions, no matter what I do #TODO #ERROR
-            }
+                csgoInstallPath = steamInstallPath + "\\steamapps\\common\\Counter-Strike Global Offensive\\";
+            } else {
+                string[] fileInput = File.ReadAllLines(steamInstallPath + @"\steamapps\libraryfolders.vdf");
+                Console.WriteLine(fileInput);
+                Console.WriteLine(fileInput.Length);
 
-            for (int n = 0; n < steamLibraries.Length; n++)
-            {
-                steamLibraries[n] = steamLibraries[n].Trim();
-                steamLibraries[n] = steamLibraries[n].Remove(0, 4);
-                steamLibraries[n] = steamLibraries[n].Trim( new char[] { '"' } );
-            }
-
-            for (int n = 0; n < steamLibraries.Length; n++)
-            {
-                string csgoSearchPath = steamLibraries[n] + "\\steamapps\\common\\Counter-Strike Global Offensive\\";
-                if (File.Exists(csgoSearchPath + "csgo.exe"))
+                for (int n = 0; n < (fileInput.Length); n++)
                 {
-                    csgoInstallPath = csgoSearchPath;
-                    break;
+                    steamLibraries[n] = fileInput[n];
+                }
+
+                for (int n = 0; n < steamLibraries.Length; n++)
+                {
+                    try
+                    {
+                        if (steamLibraries[n].Length > 4)
+                        {
+                            steamLibraries[n] = steamLibraries[n].Trim();
+                            steamLibraries[n] = steamLibraries[n].Remove(0, 3);
+                            steamLibraries[n] = steamLibraries[n].Trim();
+                            steamLibraries[n] = steamLibraries[n].Trim( new char[] { '"' } );
+                            steamLibraries[n] = steamLibraries[n].Trim();
+                            if (steamLibraries[n].EndsWith("SteamLibrary"))
+                            {
+                                Console.WriteLine("Steam Library found at {0}", steamLibraries[n]);
+                            } else {
+                                steamLibraries[n] = null;
+                            }
+                        }
+                    } catch (NullReferenceException) { }
+                }
+
+                for (int n = 0; n < steamLibraries.Length; n++)
+                {
+                    string csgoSearchPath = steamLibraries[n] + "\\steamapps\\common\\Counter-Strike Global Offensive\\";
+                    if (File.Exists(csgoSearchPath + "csgo.exe"))
+                    {
+                        Console.WriteLine("CSGO found!");
+                        csgoInstallPath = csgoSearchPath;
+                        break;
+                    }
                 }
             }
-
-            Console.WriteLine(csgoInstallPath);
 
             while (true)
             {
@@ -159,6 +179,9 @@ namespace panorama_wallpaper_changer
                     Console.WriteLine("Answer not usable. Please try again.");
                 }
             }
+
+            panoramaWallpaperPath = csgoInstallPath + "csgo\\panorama\\videos\\";
+            panoramaWallpaperStoragePath = panoramaWallpaperPath + "stored\\";
 
             if (!Directory.Exists("C:\\ProgramData\\Panorama Wallpaper Changer\\"))
             {
