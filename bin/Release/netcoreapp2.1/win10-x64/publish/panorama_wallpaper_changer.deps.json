@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.1/win10-x64",
-    "signature": "5ba89f0a214f8ca286d77794de37b548eb6148bc"
+    "signature": "846bdc368d77472123796273ee11c4d3b01b3695"
   },
   "compilationOptions": {},
   "targets": {
@@ -9,7 +9,11 @@
     ".NETCoreApp,Version=v2.1/win10-x64": {
       "panorama_wallpaper_changer/1.0.0": {
         "dependencies": {
-          "Microsoft.NETCore.App": "2.1.2"
+          "Microsoft.NETCore.App": "2.1.2",
+          "Microsoft.Win32": "1.0.0",
+          "Microsoft.Win32.Registry": "4.5.0",
+          "System.Security.AccessControl": "4.5.0",
+          "System.Security.Principal.Windows": "4.5.0"
         },
         "runtime": {
           "panorama_wallpaper_changer.dll": {}
@@ -43,6 +47,20 @@
       },
       "Microsoft.NETCore.Platforms/2.1.0": {},
       "Microsoft.NETCore.Targets/2.0.0": {},
+      "Microsoft.Win32/1.0.0": {
+        "runtime": {
+          "lib/net40/Microsoft.Win32.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Microsoft.Win32.Registry/4.5.0": {
+        "dependencies": {
+          "System.Security.AccessControl": "4.5.0",
+          "System.Security.Principal.Windows": "4.5.0"
+        }
+      },
       "NETStandard.Library/2.0.3": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "2.1.0"
@@ -866,6 +884,17 @@
             "fileVersion": "2.1.26629.5"
           }
         }
+      },
+      "System.Security.AccessControl/4.5.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "2.1.0",
+          "System.Security.Principal.Windows": "4.5.0"
+        }
+      },
+      "System.Security.Principal.Windows/4.5.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "2.1.0"
+        }
       }
     }
   },
@@ -917,6 +946,20 @@
       "path": "microsoft.netcore.targets/2.0.0",
       "hashPath": "microsoft.netcore.targets.2.0.0.nupkg.sha512"
     },
+    "Microsoft.Win32/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-J+b0OOgZL/LwR53ljb67wFJZO3h6x/iLkCYULiAQbr2efxtgiecfwuWo8m8CXOkq7Ejf5vYWuU2nZoox/Lbghg==",
+      "path": "microsoft.win32/1.0.0",
+      "hashPath": "microsoft.win32.1.0.0.nupkg.sha512"
+    },
+    "Microsoft.Win32.Registry/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-vduxuHEqRgRrTE8wYG8Wxj/+6wwzddOmZzjKZx6rFMc/91aUBxI5etAFYxesoNaIja5NpgSTcnk6cN8BeYXf9A==",
+      "path": "microsoft.win32.registry/4.5.0",
+      "hashPath": "microsoft.win32.registry.4.5.0.nupkg.sha512"
+    },
     "NETStandard.Library/2.0.3": {
       "type": "package",
       "serviceable": true,
@@ -951,6 +994,20 @@
       "sha512": "sha512-N9ESNI8Pr7wf9YqQ6/ms+vIVT9zlzamAa1rdOgkQjl38nWZ+vd2FEbEE8sLqH1iUHN0vqFkAyiXzDDV+pPktuw==",
       "path": "runtime.win-x64.microsoft.netcore.dotnethostresolver/2.1.2",
       "hashPath": "runtime.win-x64.microsoft.netcore.dotnethostresolver.2.1.2.nupkg.sha512"
+    },
+    "System.Security.AccessControl/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-aVjTe36YkO8FzfNhMLoPEzv3gF9rphoW9ngFhG/MH4zzEPLx07sNrgCLwMP4Wx2leI6qarMrGv21OwQXYUKLmw==",
+      "path": "system.security.accesscontrol/4.5.0",
+      "hashPath": "system.security.accesscontrol.4.5.0.nupkg.sha512"
+    },
+    "System.Security.Principal.Windows/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-WA9ETb/pY3BjnxKjBUHEgO59B7d/nnmjHFsqjJ2eDT780nD769CT1/bw2ia0Z6W7NqlcqokE6sKGKa6uw88XGA==",
+      "path": "system.security.principal.windows/4.5.0",
+      "hashPath": "system.security.principal.windows.4.5.0.nupkg.sha512"
     }
   }
 }
