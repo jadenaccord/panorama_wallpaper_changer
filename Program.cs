@@ -165,21 +165,6 @@ namespace panorama_wallpaper_changer
                 }
             }
 
-            while (true)
-            {
-                Console.WriteLine("Do you want the chosen wallpaper to be revealed? (Answer 'true' or 'false')");
-                userInput = Console.ReadLine();
-                if (userInput == "true") {
-                    revealChosenWallpaper = true;
-                    break;
-                } else if (userInput == "false") {
-                    revealChosenWallpaper = false;
-                    break;
-                } else {
-                    Console.WriteLine("Answer not usable. Please try again.");
-                }
-            }
-
             panoramaWallpaperPath = csgoInstallPath + "csgo\\panorama\\videos\\";
             panoramaWallpaperStoragePath = panoramaWallpaperPath + "stored\\";
 
