@@ -1,3 +1,3 @@
-New in version 1.1.0
+New in version 1.1.1
 
-- PWC will now look through registries for Steam install path, and if it isn't found user needs to insert it manually.
+- Soft-removed revealChosenWallpaper

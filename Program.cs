@@ -12,7 +12,7 @@ namespace panorama_wallpaper_changer
     class Program
     {
         //Saved in save file
-        public string currentVersion = @"1.1.0";
+        public string currentVersion = @"1.1.1";
         public int wallpaperAmount;
         public string steamInstallPath; //Folder containing steam.exe
         public string csgoInstallPath; //Folder containing csgo.exe
