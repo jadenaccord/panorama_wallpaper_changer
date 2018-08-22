@@ -184,7 +184,6 @@ namespace panorama_wallpaper_changer
             Console.ReadKey();
             Console.Clear();
             Start();
-            break;
         }
 
         public void ChooseWallpaper()
