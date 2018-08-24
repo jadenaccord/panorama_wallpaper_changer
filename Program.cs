@@ -12,7 +12,7 @@ namespace panorama_wallpaper_changer
     class Program
     {
         //Saved in save file
-        public string currentVersion = @"1.1.1";
+        public string currentVersion = @"1.1.2";
         public int wallpaperAmount;
         public string steamInstallPath; //Folder containing steam.exe
         public string csgoInstallPath; //Folder containing csgo.exe
@@ -30,6 +30,10 @@ namespace panorama_wallpaper_changer
         static void Main(string[] args)
         {
             Program pr = new Program();
+
+            Log(" ", false);
+            Log("New Session");
+
             Console.Clear();
             pr.Start();
         }
@@ -98,19 +102,24 @@ namespace panorama_wallpaper_changer
         {
             string userInput;
 
+            Log("No save file was found. Proceeding with setup.");
+
             //Find Steam install path in registry (thank you u/DontRushB)
             using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\WOW6432Node\Valve\Steam"))
             {
                 if (key != null)
                 {
                     steamInstallPath = key.GetValue("InstallPath").ToString();
+                    Log(@"RegistryKey for Steam installation was found at 'SOFTWARE\WOW6432Node\Valve\Steam'.");
                 } else {
                     using (RegistryKey key2 = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Valve\Steam"))
                     {
                         if (key != null)
                         {
                             steamInstallPath = key.GetValue("InstallPath").ToString();
+                            Log(@"RegistryKey for Steam installation was found at 'SOFTWARE\Valve\Steam'.");
                         } else {
+                            Log("No Steam installation RegistryKey was found. Prompting user to manually enter it...");
                             Console.WriteLine("Steam Install Path was not found, please enter it below:");
                             steamInstallPath = Console.ReadLine();
                         }
@@ -121,8 +130,10 @@ namespace panorama_wallpaper_changer
             //Look through Steam libraries until CSGO is found
             if (File.Exists(steamInstallPath + "\\steamapps\\common\\Counter-Strike Global Offensive\\csgo.exe"))
             {
+                Log("CSGO was found inside default Steam library.");
                 csgoInstallPath = steamInstallPath + "\\steamapps\\common\\Counter-Strike Global Offensive\\";
             } else {
+                Log("CSGO was not found inside default Steam library. Searching other libraries now...");
                 string[] fileInput = File.ReadAllLines(steamInstallPath + @"\steamapps\libraryfolders.vdf");
                 Console.WriteLine(fileInput);
                 Console.WriteLine(fileInput.Length);
@@ -145,6 +156,7 @@ namespace panorama_wallpaper_changer
                             steamLibraries[n] = steamLibraries[n].Trim();
                             if (steamLibraries[n].EndsWith("SteamLibrary"))
                             {
+                                Log(String.Format("Steam Library found at {0}", steamLibraries[n]));
                                 Console.WriteLine("Steam Library found at {0}", steamLibraries[n]);
                             } else {
                                 steamLibraries[n] = null;
@@ -158,6 +170,7 @@ namespace panorama_wallpaper_changer
                     string csgoSearchPath = steamLibraries[n] + "\\steamapps\\common\\Counter-Strike Global Offensive\\";
                     if (File.Exists(csgoSearchPath + "csgo.exe"))
                     {
+                        Log("CSGO found!");
                         Console.WriteLine("CSGO found!");
                         csgoInstallPath = csgoSearchPath;
                         break;
@@ -187,6 +200,7 @@ namespace panorama_wallpaper_changer
                 sw.WriteLine(revealChosenWallpaper);
             }
 
+            Log("Setup complete.");
             Console.WriteLine("Setup complete.");
             Console.WriteLine("Press any button to continue...");
             Console.ReadKey();
@@ -203,14 +217,16 @@ namespace panorama_wallpaper_changer
                 int i = r.Next(0, wallpaperAmount);
 
                 selectedWallpaper = wallpapers[i];
+                Log(String.Format("Selected wallpaper: {0}.", selectedWallpaper));
                 if (selectedWallpaper != activeWallpaper && selectedWallpaper != panoramaWallpaperStoragePath + "backup" 
                     && File.Exists(selectedWallpaper + "\\nuke.webm") && File.Exists(selectedWallpaper + "\\nuke540p.webm") 
                     && File.Exists(selectedWallpaper + "\\nuke720p.webm"))
                 {
                     SetWallpaper(true);
                     break;
+                } else {
+                    Log(("Selected wallpaper cannot be used."));
                 }
-                //If any of those condition above are not met, ChooseWallpaper() will basically run again. But the condition that wasn't met isn't put out.
             }
         }
 
@@ -241,11 +257,29 @@ namespace panorama_wallpaper_changer
                 Console.ReadKey();
             }
 
+            Log(String.Format("Wallpaper set to: {0}.", activeWallpaper));
+
             if (runCS) 
             {
                 ProcessStartInfo startInfo = new ProcessStartInfo(steamInstallPath + "\\Steam.exe");
                 startInfo.Arguments = "-applaunch 730";
                 Process.Start(startInfo);
+            }
+        }
+
+        public static void Log(string logMessage, bool outputDateTime = true)
+        {
+            string outputPath = @"C:\ProgramData\Panorama Wallpaper Changer\log.txt";
+            string outputText;
+
+            using (StreamWriter sw = new StreamWriter(outputPath, true))
+            {
+                if (outputDateTime)
+                {
+                    sw.WriteLine(logMessage + String.Format("    [{0}]", DateTime.Now.ToString()));
+                } else {
+                    sw.WriteLine(logMessage);
+                }
             }
         }
     }
