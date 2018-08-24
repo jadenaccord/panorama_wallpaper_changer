@@ -100,8 +100,6 @@ namespace panorama_wallpaper_changer
 
         public void Setup()
         {
-            string userInput;
-
             Log("No save file was found. Proceeding with setup.");
 
             //Find Steam install path in registry (thank you u/DontRushB)
@@ -270,7 +268,6 @@ namespace panorama_wallpaper_changer
         public static void Log(string logMessage, bool outputDateTime = true)
         {
             string outputPath = @"C:\ProgramData\Panorama Wallpaper Changer\log.txt";
-            string outputText;
 
             using (StreamWriter sw = new StreamWriter(outputPath, true))
             {
