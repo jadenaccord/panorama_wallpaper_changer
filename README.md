@@ -1,3 +1,5 @@
+NO LONGER SUPPORTED
+--------------------------------------
 Panorama Wallpaper Changer
 
 Thanks for using Panorama Wallpaper Changer by Jayby18.
